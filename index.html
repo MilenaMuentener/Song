@@ -8,13 +8,13 @@
   <!-- Nokora via Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Nokora:wght@900&display=swap" rel="stylesheet">
 
+
   <style>
     * {
       user-select: none;
       -webkit-user-select: none;
       -ms-user-select: none;
       -moz-user-select: none;
-      box-sizing: border-box;
     }
 
     body {
@@ -22,34 +22,27 @@
       background-color: #000;
       font-family: 'Nokora', sans-serif;
       color: #0051FF;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+      display: grid;
+      grid-template-rows: 1fr auto;
       height: 100vh;
+      place-items: center;
       overflow: hidden;
       position: relative;
       cursor: none;
     }
 
     .title {
-      font-size: 250px;
-      font-weight: 900;
-      text-transform: uppercase;
-      text-align: center;
-      pointer-events: none;
-      transition: filter 1s ease;
-      display: flex;
-      flex-direction: row;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
+  font-size: 250px;
+  font-weight: 900; /* Extra Bold */
+  text-transform: uppercase;
+  text-align: center;
+  pointer-events: none;
+  transition: filter 1s ease;
+}
 
     .title span {
-      display: block;
+      display: inline-block;
       animation: float 5s ease-in-out infinite;
-      line-height: 1;
     }
 
     .title span:nth-child(1) { animation-delay: 0s; }
@@ -98,16 +91,18 @@
       transition: transform 0.1s ease;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 400px) {
       .title {
-        flex-direction: column;
         font-size: 60px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
         gap: 5px;
-        align-items: center;
+        justify-content: center;
       }
 
       .footer {
-        font-size: 16px;
+        font-size: 14px;
       }
     }
   </style>
@@ -128,20 +123,14 @@
       return Math.random() * (max - min) + min;
     }
 
-    // Touchscreen-Erkennung
-    const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
 
-    // Cursor nur für Nicht-Touch-Geräte
-    if (!isTouchDevice) {
-      const cursor = document.createElement('div');
-      cursor.classList.add('cursor');
-      document.body.appendChild(cursor);
-
-      document.body.addEventListener('mousemove', function (event) {
-        cursor.style.left = event.clientX + 'px';
-        cursor.style.top = event.clientY + 'px';
-      });
-    }
+    document.body.addEventListener('mousemove', function (event) {
+      cursor.style.left = event.clientX + 'px';
+      cursor.style.top = event.clientY + 'px';
+    });
 
     let clickCount = 0;
 
@@ -153,14 +142,15 @@
       else if (clickCount === 2) volume = 0.1;
 
       const segments = [
-        { start: 0, end: 7 },
-        { start: 8, end: 15 },
-        { start: 40, end: 50 },
-        { start: 76, end: 80 },
-        { start: 104, end: 111 },
-        { start: 144, end: 158 },
-        { start: 205, end: 210 },
-        { start: 218, end: 224 }
+        { start: 0, end: 7 },         // Intro
+        { start: 8, end: 15 },        // Start 2
+        
+        { start: 40, end: 50 },       // "But at least you play this song when I'm gone"
+        { start: 76, end: 80 },       // "Girl I cry for"
+        { start: 104, end: 111 },     // "In this penthouse prison, I'm alone" (1:43 - 1:50)
+        { start: 144, end: 158 },     // "Every time I hit the road" (2:24 - 2:40)
+        { start: 205, end: 210 },     // "Girl I cry for you" (3:25 - 3:30)
+        { start: 218, end: 224 }      // 
       ];
 
       const segment = segments[Math.floor(Math.random() * segments.length)];
