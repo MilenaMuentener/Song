@@ -5,9 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CRY FOR ME</title>
 
-  <!-- Nokora via Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Nokora:wght@900&display=swap" rel="stylesheet">
-
+  <!-- Inter Extra Bold via Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -20,7 +19,7 @@
     body {
       margin: 0;
       background-color: #000;
-      font-family: 'Nokora', sans-serif;
+      font-family: 'Inter', sans-serif;
       color: #0051FF;
       display: grid;
       grid-template-rows: 1fr auto;
@@ -32,13 +31,13 @@
     }
 
     .title {
-  font-size: 250px;
-  font-weight: 900; /* Extra Bold */
-  text-transform: uppercase;
-  text-align: center;
-  pointer-events: none;
-  transition: filter 1s ease;
-}
+      font-size: 250px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      pointer-events: none;
+      transition: filter 1s ease;
+    }
 
     .title span {
       display: inline-block;
@@ -74,16 +73,26 @@
       position: absolute;
       pointer-events: none;
       z-index: 10;
-      opacity: 1;
-      transition: opacity 5s ease-out;
-      will-change: opacity;
+      will-change: transform, opacity;
       transform: translate(-50%, -50%);
+      animation: growAndFade 5s ease-out forwards;
+    }
+
+    @keyframes growAndFade {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+      }
     }
 
     .cursor {
       position: absolute;
-      width: 30px;
-      height: 30px;
+      width: 50px;
+      height: 50px;
       background-color: #0051FF;
       border-radius: 50%;
       pointer-events: none;
@@ -115,7 +124,6 @@
   </div>
   <div class="footer">the weeknd</div>
 
-  <!-- Musik-Player -->
   <audio id="bg-music" src="The Weeknd - Cry For Me (Audio).mp3" preload="auto"></audio>
 
   <script>
@@ -142,15 +150,14 @@
       else if (clickCount === 2) volume = 0.1;
 
       const segments = [
-        { start: 0, end: 7 },         // Intro
-        { start: 8, end: 15 },        // Start 2
-        
-        { start: 40, end: 50 },       // "But at least you play this song when I'm gone"
-        { start: 76, end: 80 },       // "Girl I cry for"
-        { start: 104, end: 111 },     // "In this penthouse prison, I'm alone" (1:43 - 1:50)
-        { start: 144, end: 158 },     // "Every time I hit the road" (2:24 - 2:40)
-        { start: 205, end: 210 },     // "Girl I cry for you" (3:25 - 3:30)
-        { start: 218, end: 224 }      // 
+        { start: 0, end: 7 },
+        { start: 8, end: 15 },
+        { start: 40, end: 50 },
+        { start: 76, end: 80 },
+        { start: 104, end: 111 },
+        { start: 144, end: 158 },
+        { start: 205, end: 210 },
+        { start: 218, end: 224 }
       ];
 
       const segment = segments[Math.floor(Math.random() * segments.length)];
@@ -188,8 +195,8 @@
       gif.style.top = event.clientY + 'px';
 
       document.body.appendChild(gif);
-      setTimeout(() => gif.style.opacity = 0, 5000);
-      setTimeout(() => gif.remove(), 10000);
+
+      setTimeout(() => gif.remove(), 5000);
     });
   </script>
 </body>
