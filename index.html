@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CRY FOR ME</title>
+
+  <!-- Inter Extra Bold via Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@900&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+      -moz-user-select: none;
+    }
+
+    body {
+      margin: 0;
+      background-color: #000;
+      font-family: 'Inter', sans-serif;
+      color: #0051FF;
+      display: grid;
+      grid-template-rows: 1fr auto;
+      height: 100vh;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+      cursor: none;
+    }
+
+    .title {
+      font-size: 250px;
+      font-weight: 900;
+      text-transform: uppercase;
+      text-align: center;
+      pointer-events: none;
+      transition: filter 1s ease;
+    }
+
+    .title span {
+      display: inline-block;
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .title span:nth-child(1) { animation-delay: 0s; }
+    .title span:nth-child(2) { animation-delay: 0.2s; }
+    .title span:nth-child(3) { animation-delay: 0.4s; }
+    .title span:nth-child(4) { animation-delay: 0.6s; }
+    .title span:nth-child(5) { animation-delay: 0.8s; }
+    .title span:nth-child(6) { animation-delay: 1s; }
+    .title span:nth-child(7) { animation-delay: 1.2s; }
+    .title span:nth-child(8) { animation-delay: 1.4s; }
+
+    @keyframes float {
+      0%   { transform: translateY(0px); }
+      20%  { transform: translateY(-8px) rotate(-1deg); }
+      40%  { transform: translateY(4px) rotate(0.5deg); }
+      60%  { transform: translateY(-6px) rotate(-0.5deg); }
+      80%  { transform: translateY(3px); }
+      100% { transform: translateY(0px); }
+    }
+
+    .footer {
+      font-size: 31px;
+      text-align: center;
+      padding-bottom: 16px;
+      pointer-events: none;
+    }
+
+    img.gif {
+      position: absolute;
+      pointer-events: none;
+      z-index: 10;
+      will-change: transform, opacity;
+      transform: translate(-50%, -50%);
+      animation: growAndFade 5s ease-out forwards;
+    }
+
+    @keyframes growAndFade {
+      0% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(2.5);
+        opacity: 0;
+      }
+    }
+
+    .cursor {
+      position: absolute;
+      width: 50px;
+      height: 50px;
+      background-color: #0051FF;
+      border-radius: 50%;
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      transition: transform 0.1s ease;
+    }
+
+    @media (max-width: 400px) {
+      .title {
+        font-size: 60px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 5px;
+        justify-content: center;
+      }
+
+      .footer {
+        font-size: 14px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="title">
+    <span>C</span><span>R</span><span>Y</span>
+    <span>F</span><span>O</span><span>R</span>
+    <span>M</span><span>E</span>
+  </div>
+  <div class="footer">the weeknd</div>
+
+  <audio id="bg-music" src="The Weeknd - Cry For Me (Audio).mp3" preload="auto"></audio>
+
+  <script>
+    function getRandomSize(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
+
+    document.body.addEventListener('mousemove', function (event) {
+      cursor.style.left = event.clientX + 'px';
+      cursor.style.top = event.clientY + 'px';
+    });
+
+    let clickCount = 0;
+
+    document.body.addEventListener('click', function (event) {
+      clickCount++;
+
+      let volume = 1;
+      if (clickCount === 1) volume = 0.4;
+      else if (clickCount === 2) volume = 0.1;
+
+      const segments = [
+        { start: 0, end: 7 },
+        { start: 8, end: 15 },
+        { start: 40, end: 50 },
+        { start: 76, end: 80 },
+        { start: 104, end: 111 },
+        { start: 144, end: 158 },
+        { start: 205, end: 210 },
+        { start: 218, end: 224 }
+      ];
+
+      const segment = segments[Math.floor(Math.random() * segments.length)];
+      const duration = segment.end - segment.start;
+
+      const audio = new Audio('The Weeknd - Cry For Me (Audio).mp3');
+      audio.volume = volume;
+      audio.currentTime = segment.start;
+      audio.play().catch(err => console.error("Fehler beim Abspielen:", err));
+
+      const fadeDuration = 2000;
+      const fadeSteps = fadeDuration / 50;
+      const fadeStepVolume = volume / fadeSteps;
+
+      setTimeout(() => {
+        let fadeInterval = setInterval(() => {
+          if (audio.volume > 0) {
+            audio.volume = Math.max(0, audio.volume - fadeStepVolume);
+          } else {
+            clearInterval(fadeInterval);
+          }
+        }, 50);
+      }, (duration * 1000) - fadeDuration);
+
+      setTimeout(() => {
+        audio.pause();
+        audio.remove();
+      }, duration * 1000);
+
+      const gif = document.createElement('img');
+      gif.src = 'tropfen.gif?t=' + new Date().getTime();
+      gif.className = 'gif';
+      gif.style.width = gif.style.height = getRandomSize(90, 400) + 'px';
+      gif.style.left = event.clientX + 'px';
+      gif.style.top = event.clientY + 'px';
+
+      document.body.appendChild(gif);
+
+      setTimeout(() => gif.remove(), 5000);
+    });
+  </script>
+</body>
+</html>
